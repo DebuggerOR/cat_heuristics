@@ -17,7 +17,7 @@ def run_hill_climbing(img_mat):
             fin_state = cur_fin_state
             min_val = cur_val
 
-    imsave('hill_cat.png', fin_state.get_value())
+    imsave('hill_hommer.png', fin_state.get_value())
 
 
 def run_sim_annealing(img_mat):
@@ -33,14 +33,13 @@ def run_sim_annealing(img_mat):
             fin_state = cur_fin_state
             min_val = cur_val
 
-    imsave('sim_cat.png', fin_state.get_value())
+    imsave('sim_hommer.png', fin_state.get_value())
 
 
 if __name__ == '__main__':
-    img_mat = imread('pics/cat.jpg')
+    img_mat = imread('pics/hommer.jpg')
 
-    create_colors(img_mat)
+    # create_colors(img_mat)
 
     run_hill_climbing(img_mat)
     run_sim_annealing(img_mat)
-

@@ -5,10 +5,13 @@ from numpy import average
 from scipy.stats import norm
 from skimage.draw import circle
 from skimage.io import imshow
+from PIL import Image
+import imagehash
+
 
 COLORS = []
-NUM_TRIES_NEIGHBORS = 10
-NUM_TRIES_ALGO = 5
+NUM_TRIES_NEIGHBORS = 40
+NUM_TRIES_ALGO = 10
 EXPLOIT_PARAM = 0.5
 
 
@@ -56,19 +59,32 @@ class ImageState(State):
     def get_neighbors(self, iter):
         neighbors = []
         rows, cols, _ = self.value.shape
-        radious = int(min(rows, cols) / 2) / (np.log(iter + 1))
+        radious = np.random.randint(int(min(rows, cols) / 2) / (np.log(iter + 2)), int(min(rows, cols) / 2))
 
         rr = np.random.randint(rows)
         rc = np.random.randint(cols)
-        for col in COLORS:
-            c1, c2 = circle(rr, rc, radious, shape=(rows, cols))
-            val = np.copy(self.value)
-            val[c1, c2] = col
-            neighbors.append(ImageState(val, self.goal_value))
+
+        c1, c2 = circle(rr, rc, radious, shape=(rows, cols))
+        val = np.copy(self.value)
+        val[c1, c2] = self.goal_value[rr,rc]
+        neighbors.append(ImageState(val, self.goal_value))
+        # for col in COLORS:
+        #     c1, c2 = circle(rr, rc, radious, shape=(rows, cols))
+        #     val = np.copy(self.value)
+        #     val[c1, c2] = col
+        #     neighbors.append(ImageState(val, self.goal_value))
 
         return neighbors
 
     def evaluate(self):
         err = np.sum((self.value.astype("float") - self.goal_value.astype("float")) ** 2)
-        err /= (float(self.value.shape[0] * self.value.shape[1] * self.value.shape[2]) * 10000)
+        err /= (float(self.value.shape[0] * self.value.shape[1] * self.value.shape[2]))
         return err
+
+    # def evaluate(self):
+    #     hash = imagehash.average_hash(Image.fromarray(self.value, 'RGB'))
+    #     otherhash = imagehash.average_hash(Image.fromarray(self.goal_value,'RGB'))
+    #     diff = hash - otherhash
+    #     return diff
+
+
