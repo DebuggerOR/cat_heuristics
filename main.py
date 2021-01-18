@@ -1,8 +1,10 @@
 import numpy as np
 from skimage.io import imread, imsave
-from utils import create_colors, ImageState, NUM_TRIES_ALGO
-from algos import HillClimbing, SimulatedAnnealing
 
+from algos import HillClimbing, SimulatedAnnealing
+from utils import create_colors, ImageState, NUM_TRIES_ALGO
+
+PIC_NAME = '_hommer.png'
 
 def run_hill_climbing(img_mat):
     init_mat = np.full(img_mat.shape, 255)
@@ -17,7 +19,7 @@ def run_hill_climbing(img_mat):
             fin_state = cur_fin_state
             min_val = cur_val
 
-    imsave('hill_hommer.png', fin_state.get_value())
+    imsave('hill' + PIC_NAME, fin_state.get_value())
 
 
 def run_sim_annealing(img_mat):
@@ -33,13 +35,13 @@ def run_sim_annealing(img_mat):
             fin_state = cur_fin_state
             min_val = cur_val
 
-    imsave('sim_hommer.png', fin_state.get_value())
+    imsave('sim' + PIC_NAME, fin_state.get_value())
 
 
 if __name__ == '__main__':
     img_mat = imread('pics/hommer.jpg')
 
-    # create_colors(img_mat)
+    create_colors(img_mat)
 
     run_hill_climbing(img_mat)
-    run_sim_annealing(img_mat)
+    # run_sim_annealing(img_mat)

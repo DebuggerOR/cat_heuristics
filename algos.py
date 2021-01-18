@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 import numpy as np
 from scipy.special import softmax
 
@@ -46,9 +47,10 @@ class SimulatedAnnealing(SearchAlgo):
         current = self.init_state
 
         for i in range(self.max_iters):
-            if np.random.random() < EXPLOIT_PARAM:
+            temp = 1 / np.log(i + 2)
+            if np.random.uniform(0, temp) > EXPLOIT_PARAM:
                 neighbors = current.get_neighbors(i + 1)
-                n = np.random.choice(neighbors,1,p=softmax([n.evaluate() for n in neighbors]))[0]
+                n = np.random.choice(neighbors, 1, p=softmax([n.evaluate() for n in neighbors]))[0]
                 current = n
             else:
                 min_val = current.evaluate()
